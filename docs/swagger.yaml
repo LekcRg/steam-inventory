@@ -1,0 +1,8 @@
+basePath: /
+info:
+  contact: {}
+  description: Steam inventory HTTP API
+  title: Steam inventory API
+  version: "1.0"
+paths: {}
+swagger: "2.0"
