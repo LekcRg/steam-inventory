@@ -12,7 +12,7 @@ import (
 type Handlers struct {
 	log     *zap.Logger
 	resp    *response.Responder
-	cfg     *config.Config
+	config  *config.Config
 	service *service.Service
 }
 
@@ -23,7 +23,7 @@ func New(
 	return &Handlers{
 		log:     logger,
 		resp:    resp,
-		cfg:     cfg,
+		config:  cfg,
 		service: svc,
 	}
 }

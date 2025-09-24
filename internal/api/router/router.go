@@ -2,6 +2,7 @@ package router
 
 import (
 	_ "github.com/LekcRg/steam-inventory/docs" // swaggo docs
+	"github.com/LekcRg/steam-inventory/internal/api"
 	"github.com/LekcRg/steam-inventory/internal/api/handlers"
 	"github.com/LekcRg/steam-inventory/internal/api/middlewares"
 	"github.com/go-chi/chi/v5"
@@ -22,10 +23,12 @@ func New(h *handlers.Handlers, m *middlewares.Middlewares) *chi.Mux {
 		middleware.AllowContentType("application/json"),
 	)
 
-	r.Get(PathHi, h.Hi)
+	r.Get(api.PathHi, h.Hi)
+	r.Get(api.PathAuthRedirect, h.AuthRedirect)
+	r.Get(api.PathValidAuth, h.AuthValid)
 
-	r.Get(PathSwagger, httpSwagger.Handler(
-		httpSwagger.URL(PathSwaggerJSON),
+	r.Get(api.PathSwagger, httpSwagger.Handler(
+		httpSwagger.URL(api.PathSwaggerJSON),
 	))
 
 	return r

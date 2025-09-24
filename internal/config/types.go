@@ -15,4 +15,5 @@ type Config struct {
 	Config   string   `env:"CONFIG" short:"c" long:"config" description:"Path to yaml config"`
 	Addr     string   `yaml:"address" env:"ADDRESS" short:"a" long:"addresss" description:"Address for HTTP server"`
 	IsDev    bool     `yaml:"is_dev" env:"IS_DEV" short:"d" long:"dev" description:"Dev mode"`
+	Domain   string   `yaml:"domain" env:"DOMAIN" long:"domain" description:"Domain name"`
 }
