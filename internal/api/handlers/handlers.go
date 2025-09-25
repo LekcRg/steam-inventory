@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/LekcRg/steam-inventory/internal/api/middlewares"
 	response "github.com/LekcRg/steam-inventory/internal/api/responder"
 	"github.com/LekcRg/steam-inventory/internal/config"
 	"github.com/LekcRg/steam-inventory/internal/service"
@@ -29,5 +31,13 @@ func New(
 }
 
 func (h *Handlers) Hi(w http.ResponseWriter, r *http.Request) {
-	h.resp.Message(w, http.StatusOK, "Hello, world!")
+	userIDAny := r.Context().Value(middlewares.CtxKeySteamID)
+	userID, ok := userIDAny.(string)
+	if !ok {
+		h.resp.Error(w, http.StatusForbidden, "Forbidden")
+		return
+	}
+
+	h.resp.Message(w, http.StatusOK,
+		fmt.Sprintf("Hello user with Steam ID %s!", userID))
 }

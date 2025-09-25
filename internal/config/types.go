@@ -1,5 +1,7 @@
 package config
 
+import "time"
+
 type Postgres struct {
 	User     string `yaml:"user" env:"POSTGRES_USER" long:"pg-user" description:"Postgres user"`
 	Password string `yaml:"password" env:"POSTGRES_PASSWORD" long:"pg-pass" description:"Postgres password"`
@@ -15,11 +17,19 @@ type Steam struct {
 	APIDomain string `yaml:"api_domain" env:"STEAM_API_DOMAIN" long:"steam-api-domain" description:"Steam API domain"`
 }
 
+type Redis struct {
+	Addr     string `yaml:"addr" env:"REDIS_ADDR" long:"redis-addr" description:"Redis address"`
+	Password string `yaml:"password" env:"REDIS_PASSWORD" long:"redis-pass" description:"Redis password"`
+	DB       int    `yaml:"db" env:"REDIS_DB" long:"redis-db" description:"Redis database"`
+}
+
 type Config struct {
-	Postgres Postgres `yaml:"postgres"`
-	Config   string   `env:"CONFIG" short:"c" long:"config" description:"Path to yaml config"`
-	Addr     string   `yaml:"address" env:"ADDRESS" short:"a" long:"addresss" description:"Address for HTTP server"`
-	IsDev    bool     `yaml:"is_dev" env:"IS_DEV" short:"d" long:"dev" description:"Dev mode"`
-	Domain   string   `yaml:"domain" env:"DOMAIN" long:"domain" description:"Domain name"`
-	Steam    Steam    `yaml:"steam"`
+	Postgres      Postgres      `yaml:"postgres"`
+	Redis         Redis         `yaml:"redis"`
+	Config        string        `env:"CONFIG" short:"c" long:"config" description:"Path to yaml config"`
+	Addr          string        `yaml:"address" env:"ADDRESS" short:"a" long:"addresss" description:"Address for HTTP server"`
+	IsDev         bool          `yaml:"is_dev" env:"IS_DEV" short:"d" long:"dev" description:"Dev mode"`
+	Domain        string        `yaml:"domain" env:"DOMAIN" long:"domain" description:"Domain name"`
+	Steam         Steam         `yaml:"steam"`
+	SessionExpire time.Duration `yaml:"session_expire" env:"SESSION_EXPIRE" long:"session-expire" description:"Session expiration duration"`
 }

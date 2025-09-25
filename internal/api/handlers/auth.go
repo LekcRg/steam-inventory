@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/LekcRg/steam-inventory/internal/api"
 	"github.com/LekcRg/steam-inventory/internal/errs"
 	"go.uber.org/zap"
 )
@@ -21,7 +22,7 @@ func (h *Handlers) AuthRedirect(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) AuthValid(w http.ResponseWriter, r *http.Request) {
-	user, err := h.service.AuthValid(r.Context(), r.URL.Query())
+	_, session, err := h.service.AuthValid(r.Context(), r.URL.Query())
 	if err != nil {
 		if errors.Is(err, errs.ErrInvalidAuth) {
 			h.resp.Error(w, http.StatusUnauthorized, "Invalid auth try again")
@@ -35,5 +36,17 @@ func (h *Handlers) AuthValid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.resp.JSON(w, http.StatusOK, user)
+	cookies := http.Cookie{
+		Name:     "sestoken",
+		Value:    session,
+		Path:     "/",
+		MaxAge:   int(h.config.SessionExpire),
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+	}
+
+	http.SetCookie(w, &cookies)
+
+	http.Redirect(w, r, api.PathMe, http.StatusPermanentRedirect)
 }

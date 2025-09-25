@@ -23,9 +23,14 @@ func New(h *handlers.Handlers, m *middlewares.Middlewares) *chi.Mux {
 		middleware.AllowContentType("application/json"),
 	)
 
-	r.Get(api.PathHi, h.Hi)
 	r.Get(api.PathAuthRedirect, h.AuthRedirect)
 	r.Get(api.PathValidAuth, h.AuthValid)
+
+	r.Group(func(r chi.Router) {
+		r.Use(m.Auth)
+		// r.Get(api.PathHi, h.Hi)
+		r.Get(api.PathMe, h.UserInfo)
+	})
 
 	r.Get(api.PathSwagger, httpSwagger.Handler(
 		httpSwagger.URL(api.PathSwaggerJSON),

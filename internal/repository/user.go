@@ -54,3 +54,18 @@ func (r *Repo) CreateOrUpdateUser(
 
 	return &u, nil
 }
+
+func (r *Repo) GetUserBySteamID(
+	ctx context.Context, userID string,
+) (*models.User, error) {
+	sql := `SELECT * FROM users WHERE steamid = $1`
+
+	var u models.User
+
+	err := r.db.GetContext(ctx, &u, sql, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &u, nil
+}

@@ -6,4 +6,5 @@ const (
 	PathHi           = "/hi"
 	PathAuthRedirect = "/auth"
 	PathValidAuth    = "/auth/valid"
+	PathMe           = "/me"
 )

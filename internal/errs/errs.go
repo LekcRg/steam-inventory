@@ -9,4 +9,5 @@ var (
 	ErrInvalidAuth         = errors.New("invalid authentication")
 	ErrInvalidSteamID      = errors.New("invalid steam id")
 	ErrNotFoundUserSummary = errors.New("user summary not found")
+	ErrNotFoundUser        = errors.New("user not found")
 )

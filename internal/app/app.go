@@ -12,6 +12,7 @@ import (
 	"github.com/LekcRg/steam-inventory/internal/api/middlewares"
 	response "github.com/LekcRg/steam-inventory/internal/api/responder"
 	"github.com/LekcRg/steam-inventory/internal/api/router"
+	"github.com/LekcRg/steam-inventory/internal/cache"
 	"github.com/LekcRg/steam-inventory/internal/config"
 	"github.com/LekcRg/steam-inventory/internal/logger"
 	"github.com/LekcRg/steam-inventory/internal/repository"
@@ -88,11 +89,12 @@ func (a *App) createServer() *http.Server {
 }
 
 func (a *App) createRouter() *chi.Mux {
+	c := cache.New(a.Config.Redis)
 	st := steam.New(a.Config)
-	svc := service.New(a.Config, a.repository, st)
+	svc := service.New(a.Config, a.repository, st, c)
 	resp := response.New(a.Log)
 	handl := handlers.New(a.Log, svc, a.Config, resp)
-	middl := middlewares.New(a.Config, a.Log)
+	middl := middlewares.New(a.Config, a.Log, c, resp)
 
 	return router.New(handl, middl)
 }
