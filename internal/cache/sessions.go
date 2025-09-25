@@ -28,5 +28,15 @@ func (c *Cache) DelSession(ctx context.Context, session string) error {
 func (c *Cache) GetSession(
 	ctx context.Context, session string,
 ) (string, error) {
-	return c.client.Get(ctx, SessionPrefix+session).Result()
+	steamID, err := c.client.Get(ctx, SessionPrefix+session).Result()
+	if err != nil {
+		return "", err
+	}
+
+	err = c.client.Expire(ctx, SessionPrefix+session, SessionExpiration).Err()
+	if err != nil {
+		return "", err
+	}
+
+	return steamID, nil
 }
