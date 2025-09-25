@@ -26,6 +26,9 @@ betteralign:
 migrate:
 	$(GOOSE) up
 
+migrate-down:
+	$(GOOSE) down
+
 create-migration:
 	$(GOOSE) create $(word 2,$(MAKECMDGOALS)) sql
 	@:

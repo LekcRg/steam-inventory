@@ -10,10 +10,16 @@ type Postgres struct {
 	MaxConns string `yaml:"max_conns" env:"MAX_CONNS" long:"pg-max-conns" description:"Postgres max poll connection"`
 }
 
+type Steam struct {
+	APIKey    string `yaml:"api_key" env:"STEAM_API_KEY" long:"steam-api-key" description:"Steam API key"`
+	APIDomain string `yaml:"api_domain" env:"STEAM_API_DOMAIN" long:"steam-api-domain" description:"Steam API domain"`
+}
+
 type Config struct {
 	Postgres Postgres `yaml:"postgres"`
 	Config   string   `env:"CONFIG" short:"c" long:"config" description:"Path to yaml config"`
 	Addr     string   `yaml:"address" env:"ADDRESS" short:"a" long:"addresss" description:"Address for HTTP server"`
 	IsDev    bool     `yaml:"is_dev" env:"IS_DEV" short:"d" long:"dev" description:"Dev mode"`
 	Domain   string   `yaml:"domain" env:"DOMAIN" long:"domain" description:"Domain name"`
+	Steam    Steam    `yaml:"steam"`
 }

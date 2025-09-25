@@ -16,6 +16,7 @@ import (
 	"github.com/LekcRg/steam-inventory/internal/logger"
 	"github.com/LekcRg/steam-inventory/internal/repository"
 	"github.com/LekcRg/steam-inventory/internal/service"
+	"github.com/LekcRg/steam-inventory/internal/steam"
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
 )
@@ -62,6 +63,7 @@ func (a *App) printConfig() {
 
 	cfg := *a.Config
 	cfg.Postgres.Password = redacted
+	cfg.Steam.APIKey = redacted
 
 	a.Log.Info("Got config", zap.Any("config", cfg))
 }
@@ -86,7 +88,8 @@ func (a *App) createServer() *http.Server {
 }
 
 func (a *App) createRouter() *chi.Mux {
-	svc := service.New(a.Config, a.repository)
+	st := steam.New(a.Config)
+	svc := service.New(a.Config, a.repository, st)
 	resp := response.New(a.Log)
 	handl := handlers.New(a.Log, svc, a.Config, resp)
 	middl := middlewares.New(a.Config, a.Log)
