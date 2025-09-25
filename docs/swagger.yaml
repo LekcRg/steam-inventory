@@ -1,8 +1,113 @@
 basePath: /
+definitions:
+  models.ResponseError:
+    properties:
+      error:
+        type: string
+    type: object
+  models.User:
+    properties:
+      avatarfull:
+        type: string
+      communityvisibilitystate:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      lastlogoff:
+        type: integer
+      personaname:
+        type: string
+      realname:
+        type: string
+      steamid:
+        type: string
+      timecreated:
+        type: integer
+      updated_at:
+        type: string
+    type: object
 info:
   contact: {}
   description: Steam inventory HTTP API
   title: Steam inventory API
   version: "1.0"
-paths: {}
+paths:
+  /auth:
+    get:
+      description: Returns a 303 redirect to Steam authorization page.
+      produces:
+      - text/plain
+      responses:
+        "303":
+          description: Redirect to Steam
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      summary: Redirect to Steam Auth
+      tags:
+      - Auth
+  /auth/valid:
+    get:
+      description: Validates Steam auth response, sets session cookie and redirects
+        to /me.
+      produces:
+      - text/plain
+      responses:
+        "303":
+          description: Redirect to /me
+          headers:
+            Location:
+              description: Redirect target (/me)
+              type: string
+            Set-Cookie:
+              description: sestoken=<token>; HttpOnly; Secure; Path=/; SameSite=Lax
+              type: string
+          schema:
+            type: string
+        "401":
+          description: Invalid auth
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      summary: Steam auth callback
+      tags:
+      - Auth
+  /me:
+    get:
+      consumes:
+      - application/json
+      description: Returns info about the logged-in user based on session cookie.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User info
+          schema:
+            $ref: '#/definitions/models.User'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - CookieAuth: []
+      summary: Get current user info
+      tags:
+      - User
+securityDefinitions:
+  CookieAuth:
+    in: cookie
+    name: sestoken
+    type: apiKey
 swagger: "2.0"

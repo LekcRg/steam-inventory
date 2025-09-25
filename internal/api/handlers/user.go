@@ -9,6 +9,19 @@ import (
 	"go.uber.org/zap"
 )
 
+// UserInfo godoc
+// @Summary      Get current user info
+// @Description  Returns info about the logged-in user based on session cookie.
+// @Tags         User
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} models.User "User info"
+// @Failure      404 {object} models.ResponseError "User not found"
+// @Failure      500 {object} models.ResponseError "Internal error"
+// @Router       /me [get]
+// @Security     CookieAuth
+//
+// Returns info about the logged-in user based on session cookie.
 func (h *Handlers) UserInfo(w http.ResponseWriter, r *http.Request) {
 	steamID, ok := r.Context().Value(middlewares.CtxKeySteamID).(string)
 	if !ok {

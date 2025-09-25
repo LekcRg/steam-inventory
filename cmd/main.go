@@ -12,11 +12,14 @@ import (
 	"go.uber.org/zap"
 )
 
-// @title Steam inventory API
-// @version 1.0
-// @description Steam inventory HTTP API
+// @title           Steam inventory API
+// @version         1.0
+// @description     Steam inventory HTTP API
+// @BasePath        /
 
-// @BasePath /
+// @securityDefinitions.apikey CookieAuth
+// @in                cookie
+// @name              sestoken
 
 func main() {
 	const ctxTimeout = 10 * time.Second

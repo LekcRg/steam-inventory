@@ -7,5 +7,166 @@
         "version": "1.0"
     },
     "basePath": "/",
-    "paths": {}
+    "paths": {
+        "/auth": {
+            "get": {
+                "description": "Returns a 303 redirect to Steam authorization page.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Redirect to Steam Auth",
+                "responses": {
+                    "303": {
+                        "description": "Redirect to Steam",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/valid": {
+            "get": {
+                "description": "Validates Steam auth response, sets session cookie and redirects to /me.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Steam auth callback",
+                "responses": {
+                    "303": {
+                        "description": "Redirect to /me",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "headers": {
+                            "Location": {
+                                "type": "string",
+                                "description": "Redirect target (/me)"
+                            },
+                            "Set-Cookie": {
+                                "type": "string",
+                                "description": "sestoken=\u003ctoken\u003e; HttpOnly; Secure; Path=/; SameSite=Lax"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid auth",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/me": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Returns info about the logged-in user based on session cookie.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get current user info",
+                "responses": {
+                    "200": {
+                        "description": "User info",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.ResponseError": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "avatarfull": {
+                    "type": "string"
+                },
+                "communityvisibilitystate": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastlogoff": {
+                    "type": "integer"
+                },
+                "personaname": {
+                    "type": "string"
+                },
+                "realname": {
+                    "type": "string"
+                },
+                "steamid": {
+                    "type": "string"
+                },
+                "timecreated": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "CookieAuth": {
+            "type": "apiKey",
+            "name": "sestoken",
+            "in": "cookie"
+        }
+    }
 }
