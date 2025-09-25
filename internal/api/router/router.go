@@ -8,12 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	httpSwagger "github.com/swaggo/http-swagger"
-	"go.uber.org/zap"
 )
-
-type Router struct {
-	log zap.Logger
-}
 
 func New(h *handlers.Handlers, m *middlewares.Middlewares) *chi.Mux {
 	r := chi.NewRouter()
@@ -28,7 +23,6 @@ func New(h *handlers.Handlers, m *middlewares.Middlewares) *chi.Mux {
 
 	r.Group(func(r chi.Router) {
 		r.Use(m.Auth)
-		// r.Get(api.PathHi, h.Hi)
 		r.Get(api.PathMe, h.UserInfo)
 	})
 

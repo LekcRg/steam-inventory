@@ -22,12 +22,12 @@ type Service struct {
 }
 
 func New(
-	config *config.Config, repo repository,
+	cfg *config.Config, repo repository,
 	st *steam.Steam, c *cache.Cache,
 ) *Service {
 	return &Service{
 		repo:   repo,
-		config: config,
+		config: cfg,
 		steam:  st,
 		cache:  c,
 	}

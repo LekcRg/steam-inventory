@@ -8,8 +8,8 @@ import (
 )
 
 func (s *Steam) GetUserSummary(steamID string) (*models.User, error) {
-	user := &models.UserSummuryApiResponse{}
-	apiURL := s.ApiURLUserSummary(steamID)
+	user := &models.UserSummuryAPIResponse{}
+	apiURL := s.APIURLUserSummary(steamID)
 
 	res, err := s.client.R().
 		SetResult(user).

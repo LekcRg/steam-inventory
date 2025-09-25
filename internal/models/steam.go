@@ -1,6 +1,6 @@
 package models
 
-type UserSummuryApiResponse struct {
+type UserSummuryAPIResponse struct {
 	Response struct {
 		Users []User `json:"players"`
 	} `json:"response"`

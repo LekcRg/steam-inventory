@@ -7,7 +7,7 @@ import (
 
 	"github.com/LekcRg/steam-inventory/internal/api"
 	"github.com/LekcRg/steam-inventory/internal/errs"
-	"github.com/LekcRg/steam-inventory/internal/utils"
+	"github.com/LekcRg/steam-inventory/internal/querystring"
 )
 
 const steamURL = "https://steamcommunity.com/openid/login"
@@ -29,7 +29,7 @@ func (s *Steam) GetRedirectURL() (*url.URL, error) {
 		"openid.claimed_id": "http://specs.openid.net/auth/2.0/identifier_select",
 	}
 
-	redirectURL.RawQuery = utils.BuildQuery(queries)
+	redirectURL.RawQuery = querystring.BuildQuery(queries)
 
 	return redirectURL, nil
 }

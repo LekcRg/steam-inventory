@@ -10,9 +10,9 @@ type Steam struct {
 	config *config.Config
 }
 
-func New(config *config.Config) *Steam {
+func New(cfg *config.Config) *Steam {
 	return &Steam{
 		client: resty.New(),
-		config: config,
+		config: cfg,
 	}
 }

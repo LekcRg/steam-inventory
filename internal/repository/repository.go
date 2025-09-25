@@ -34,7 +34,7 @@ func New(
 
 	db := sqlx.NewDb(nativeDB, PostgresDriver)
 
-	err = db.Ping()
+	err = db.PingContext(ctx)
 	if err != nil {
 		return nil, err
 	}
